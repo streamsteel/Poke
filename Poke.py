@@ -1,5 +1,5 @@
 import random
-class cards:
+class Cards:
     def __init__(self, havaJoker=False):
         # 生成一副扑克牌
         # havaJoker : 是否含有大小王

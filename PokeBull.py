@@ -1,5 +1,5 @@
 # 扑克牌斗牛
-from Poke import cards
+from Poke import Cards
 import random
 from itertools import combinations
 import time
@@ -66,7 +66,7 @@ class Bull():
 
                 
 
-card = cards()
+card = Cards()
 print('原始牌组:', card.allcards)
 card.shuffle_card()  # 洗牌
 print('洗牌后:', card.allcards)
@@ -98,6 +98,6 @@ while True:
         print('You are unlucky,you have nothing but me~')
 
     # 洗牌重新开始
+    input('按任意键开始下一把')
     card.recovery()
-    time.sleep(5)
     print('游戏开始'.center(50, '='))
