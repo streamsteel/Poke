@@ -1,5 +1,5 @@
 # 扑克牌斗牛
-from Poke import Cards
+from poke import Cards
 import random
 from itertools import combinations
 import time
@@ -24,48 +24,40 @@ class Bull:
         for comb in _comb_list:
             if len(set(comb)) == 1:
                 return True
+        return False
 
     def islessTen(self):
         if sum(self.cards) < 10:
             return True
+        return False
 
     def isGold(self):
-        if all(card >= 10 for card in self.cards):
+        # 判断是否是牛牛
+        if len(list(card for card in self.cards if card >= 10)) == 4:
             return True
-        else:
-            copy_card = []
-            for card in self.cards:
-                if card >= 10:
-                    copy_card.append(10)
-                else:
-                    copy_card.append(card)
-            if (
-                sum(copy_card) % 10 == 0
-                and len([_c for _c in copy_card if _c >= 10]) >= 2
-            ):
-                return True
+        # 如果self.cards中存在3项和为10的倍数，且另外元素和为10的倍数，返回True
+        _comb_list = list(combinations(range(5), 3))
+        for comb in _comb_list:
+            if sum([self.cards[i] for i in comb]) % 10 == 0:
+                copy_card = [card for card in self.cards if card <= 10]
+                for c in comb:
+                    copy_card.remove(self.cards[c])
+                if sum(copy_card) % 10 == 0:
+                    return True
+            
+        return False
 
     def isExBull(self):
-        if len(list(card for card in self.cards if card >= 10)) >= 3:
-            self.tail = str(sum([card for card in self.cards if card <= 10]) % 10)
-            return True
-        else:
-            copy_card = []
-            for card in self.cards:
-                if card >= 10:
-                    copy_card.append(10)
-                else:
-                    copy_card.append(card)
-            _comb_list = list(combinations(copy_card, 3))
-            for comb in _comb_list:
-                copy_card_2 = copy_card
-                if sum(comb) % 10 == 0:
-                    for c in comb:
-                        copy_card_2.remove(c)
-                    print(copy_card_2)
-                    self.tail = sum(copy_card_2) % 10
-                    return True
-
+        _comb_list = list(combinations(range(5), 3))
+        for comb in _comb_list:
+            if sum([self.cards[i] for i in comb]) % 10 == 0:
+                copy_card = [card for card in self.cards if card <= 10]
+                for c in comb:
+                    copy_card.remove(self.cards[c])
+                self.tail = sum(copy_card) % 10
+                return True
+            
+        return False
 
 def game(n: int = 2):
     # n : 玩家人数
@@ -110,7 +102,7 @@ def game(n: int = 2):
     # 判断胜负: 999 > 998 > 997 > 500 > 499 > ... > 0, 输出胜利者key
     winner = sorted(winner.items(), key=lambda x: x[1], reverse=True)
     print(f"胜利者为：|-*- Player{winner[0][0]+1} -*-|")
-    print("游戏结束")
+    print("游戏结束".center(50, "="))
 
 
 if __name__ == "__main__":
@@ -128,5 +120,3 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             print("\nBye~")
             break
-
-
