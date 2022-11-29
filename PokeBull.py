@@ -4,6 +4,11 @@ import random
 from itertools import combinations
 import time
 
+# card color unicode
+# ♠ 9824
+# ♥ 9829
+# ♣ 9827
+# ♦ 9830
 
 card_change = {
     11: "J",
@@ -36,12 +41,18 @@ class Bull:
         if len(list(card for card in self.cards if card >= 10)) == 4:
             return True
         # 如果self.cards中存在3项和为10的倍数，且另外元素和为10的倍数，返回True
+        recards = []
+        for card in self.cards:
+            if card >= 10:
+                recards.append(10)
+            else:
+                recards.append(card)
         _comb_list = list(combinations(range(5), 3))
         for comb in _comb_list:
-            if sum([self.cards[i] for i in comb]) % 10 == 0:
-                copy_card = [card for card in self.cards if card <= 10]
+            if sum([recards[i] for i in comb]) % 10 == 0:
+                copy_card = [card for card in recards if card <= 10]
                 for c in comb:
-                    copy_card.remove(self.cards[c])
+                    copy_card.remove(recards[c])
                 if sum(copy_card) % 10 == 0:
                     return True
             
@@ -49,11 +60,17 @@ class Bull:
 
     def isExBull(self):
         _comb_list = list(combinations(range(5), 3))
+        recards = []
+        for card in self.cards:
+            if card >= 10:
+                recards.append(10)
+            else:
+                recards.append(card)
         for comb in _comb_list:
-            if sum([self.cards[i] for i in comb]) % 10 == 0:
-                copy_card = [card for card in self.cards if card <= 10]
+            if sum([recards[i] for i in comb]) % 10 == 0:
+                copy_card = [card for card in recards if card <= 10]
                 for c in comb:
-                    copy_card.remove(self.cards[c])
+                    copy_card.remove(recards[c])
                 self.tail = sum(copy_card) % 10
                 return True
             
